@@ -1,9 +1,0 @@
-want to work on points 09-07-2025
-
-1.mobile responsive for admin pages to look good.
-
-2.table for available from and to 
-
-3.give different colors and styles for specialities.
-
-4.work on the code javascript and php.

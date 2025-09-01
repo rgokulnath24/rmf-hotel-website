@@ -1,5 +1,0 @@
-1.Front Page is done.
-
-2.in admin want to write the backend code for edit and adjust the sidebar to correct that.
-
-3.check the responsive and password securities.
