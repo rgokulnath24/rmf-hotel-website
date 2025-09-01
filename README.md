@@ -35,12 +35,4 @@ A modern, single-page website for RMF Hotel that displays breakfast to dinner it
 ## 📸 Screenshots
 | User View                                                                                                                | Admin View                                                                                                                |
 | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| ![User View](https://rajamathi-hotel.infinityfree.me/assets/user-screenshot.png)                                         | ![Admin View](https://rajamathi-hotel.infinityfree.me/assets/admin-screenshot.png)                                       |
-
----
-
-## 🚀 How to Run Locally
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-username/rmf-hotel-website.git
+|<img width="400" height="400" alt="Screenshot 2025-09-02 004245" src="https://github.com/user-attachments/assets/b3f1af60-107c-4393-85b4-38c2aac31e82" /> | <img width="400" height="400" alt="Screenshot 2025-09-02 004307" src="https://github.com/user-attachments/assets/b5cc00ae-43b0-4560-928b-6558b516cc7b" />
