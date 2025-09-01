@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>For Each Code</title>
+</head>
+<body>
+<div id="divi"></div>
+</body>
+<script>
+const movies=["Master","Leo","GOAT"];
+movies.forEach((movie,index)=>
+{
+const ele=document.getElementById("divi");
+ele.innerHTML+=(index+1)+"."+movie+"<br>";
+});
+</script>
+</html>

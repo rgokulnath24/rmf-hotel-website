@@ -1,0 +1,68 @@
+<div class="container py-3">
+<section class="py-3 text-center">
+<h2 class="mb-4">Specialities</h2>
+<div id="container">
+<div class="swiper mySwiper">
+<div class="swiper-wrapper">
+<div class="swiper-slide">
+<div class="card shadow open-modal" data-category="breakfast">
+<img src="" class="crad-img-top">
+<div class="card-body">
+<div class="card-title">
+</div>
+<div class="swiper-slide">
+<div class="card shadow open-modal">
+<img class="card-img-top" src="images/img">
+<div class="card-body">
+<div class="card-title">
+<div class="card-text">
+</div>
+</div>
+</div>
+
+
+js code 
+
+
+document.addEventListener("DOMContentLoaded",function()
+{
+const swiper=new Swiper(
+{
+loop:true,
+centeredSlides:true;
+slidesPerView:1,
+spaceBetween:20,
+autoplay
+{
+delay:2500,
+disableOnInteraction:false
+},
+navigation
+{
+nextEl:".swiper-button-next",
+prevEl:".swiper-button-prev",
+},
+breakpoints
+{
+768:
+{
+slidesPerView:2
+},
+992:
+{
+slidesPerView:3
+}
+}
+});
+});
+
+
+<div class="swiper-button-next"></div>
+<div class="swiper-button-prev"></div>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>

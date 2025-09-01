@@ -1,0 +1,224 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #B0CBA4;
+  padding: 30px;
+  margin: 0;
+}
+
+.main-content {
+  max-width: 1000px;
+  background: #ffffff;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  margin: auto;
+  transition: margin-left 0.3s ease;
+}
+
+/* Shift only on smaller screens when sidebar is open */
+@media (max-width: 767px) {
+  .main-content.shifted {
+    margin-left: 220px;
+  }
+}
+
+.veg-heading,
+.nonveg-heading {
+  padding: 20px;
+  letter-spacing: 3px;
+}
+
+.veg-heading {
+  color: green;
+}
+
+.nonveg-heading {
+  color: brown;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+/* Tablet view - 2 columns */
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile view - 1 column */
+@media (max-width: 576px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card p {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.avail-from {
+  color: #007BFF;
+  font-weight: 500;
+}
+
+.avail-to {
+  color: #28A745;
+  font-weight: 500;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+.actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Edit button style */
+.actions button:first-child {
+  background-color: #3498db;
+}
+
+.actions button:first-child:hover {
+  background-color: #2980b9;
+}
+
+/* Delete button style */
+.actions button:last-child {
+  background-color: #e74c3c;
+  margin-left: 10px;
+}
+
+.actions button:last-child:hover {
+  background-color: #c0392b;
+}
+
+.meals-container {
+  margin-top: 50px;
+}
+
+/* Modal background */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+/* Close button (X) */
+.close-btn1 {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Input styling */
+.modal-content input[type="text"],
+.modal-content input[type="time"],
+.modal-content input[type="file"],
+.modal-content select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Button styling */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.update-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.update-btn:hover,
+.cancel-btn:hover {
+  opacity: 0.9;
+}
+#existingImage {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;  /* Makes it fill the box, cropping if needed */
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}

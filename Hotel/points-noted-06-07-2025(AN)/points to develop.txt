@@ -1,0 +1,15 @@
+1.while in contact us form swal alert use rmf logo in contact success card
+
+2.use any other styles for services,about like center alignment
+
+3.use any other styles for contact details in right also it not look great.
+
+4.response in contact form takes some seconds to receive a confirmation message.
+
+5.want to add +91 that india numbers before phone number so that it looks good.
+
+6.color of the item in modal card also want to get updated.
+
+7.item and avail from and avail to be to be table so that it looks better.
+
+8.Max length is added in contact form but want to check and more validation to be added.

@@ -1,0 +1,145 @@
+:root {
+  --primary: #007bff;
+  --bg: #f4f4f4;
+  --text: #333;
+  --white: #fff;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  transition: background 0.3s, color 0.3s;
+  background-color:#C2DAB8;
+}
+.logo-container
+{
+display:flex;
+justify-content:center;
+align-items:center;
+margin-bottom:1.2rem;
+background-color:#B0CBA4;
+border-radius:20px;
+}
+.logo-zoom-wrapper {
+  transform: scale(2.4);
+  transform-origin: center;
+}
+.logo-image {
+  width: 80px;
+  height: auto;
+}
+.login-container {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 90%;
+}
+
+
+.input-group {
+  margin-bottom: 1.2rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.input-group input {
+  width: 94%;
+  padding: 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.password-group {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 35px;
+  cursor:pointer;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+input[type="checkbox"]
+{
+transform:scale(1.5);
+}
+#remember,#dark
+{
+display:flex;
+gap:5px;
+}
+#moon{
+margin-bottom:10px;
+}
+button {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  color:#000;
+  background-color:#B0CBA4;
+}
+
+.toggle-icon {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #333;
+  display: block;
+  margin: 1.5rem auto 0;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.dark-mode .toggle-icon {
+  color: #fff;
+}
+
+.dark-mode-toggle {
+  justify-content:center;
+  align-items: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  display:flex;
+  gap:5px;
+}
+body.dark-mode {
+  background: #1e1e1e;
+  color: white;
+}
+
+body.dark-mode .login-container {
+  background: #2e2e2e;
+  color: white;
+}
+
+body.dark-mode .input-group input {
+  background: #444;
+  color: white;
+  border: 1px solid #666;
+}
+

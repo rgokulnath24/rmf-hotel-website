@@ -1,0 +1,28 @@
+Menus 
+
+I Preferred to have this Menus
+in front end 
+
+1.About-Linked Properly
+
+2.Specialities-to move on to dinner,snacks,breakfast,lunch
+
+3.Contact Us-We can Have a Form verify geetham's website .
+
+4.Services-We Undertake Party and Bulk Orders liek the text with images we can use.
+
+5.Branches-we have a branch at any two places.
+
+The Points I am Going to Improve
+
+1.In Mobile Responsive the about menu is not working
+ check it and fix it and learn it 
+ 
+2.In Specialities for avail from and avail to add any color to highlight it bduddy
+
+3.For Item name change into Any other color rather than green color
+
+4.Swiper Loop Warning: The number of slides is not enough for loop mode, it will be disabled or not function properly. You need to add more slides (or make duplicates) or lower the values of slidesPerView and slidesPerGroup parameters 10 0:380:14
+This issue in swipper.
+
+-issue solved where added duplicate slides to increase slides number

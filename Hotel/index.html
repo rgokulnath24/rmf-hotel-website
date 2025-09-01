@@ -1,0 +1,238 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RMF Mess</title>
+<link rel="icon" type="image/jpeg" href="images/logo-short.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Playfair+Display&display=swap" rel="stylesheet">
+<!--bootstrap-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="js/script.js" defer></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand mx-auto d-lg-none" href="#">
+      <img src="images/logo.png" alt="RMF">
+    </a>
+    <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+   <div class="collapse navbar-collapse justify-content-between align-items-center" id="navbarResponsive">
+  <ul class="navbar-nav d-flex flex-row flex-lg-row gap-lg-3">
+    <li class="nav-item"><a class="nav-link" href="#home-section">Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="#about-section">About</a></li>
+    <li class="nav-item"><a class="nav-link" href="#service-section">Services</a></li>
+  </ul>
+
+  <a class="navbar-brand d-none d-lg-block" href="#">
+    <img class="logo" src="images/logo.png" alt="RMF Logo">
+  </a>
+
+  <ul class="navbar-nav d-flex flex-row flex-lg-row gap-lg-3">
+    <li class="nav-item">
+      <a class="nav-link" href="#gallery-section">Gallery</a></li>
+    <li class="nav-item"><a class="nav-link" href="#menus-section">Menus</a></li>
+    <li class="nav-item"><a class="nav-link" href="#footer-contact">Contact Us</a></li>
+  </ul>
+</div>
+  </div>
+</nav>
+
+<div class="hero-section" id="home-section">
+  <div class="overlay"></div>
+  <div class="text-content">
+   <h1>Welcome to Rajamadhi Foods</h1>
+   <p>Delight in Traditional Flavors crafted with care.</p>
+  </div>
+</div>
+
+<div class="about-section" id="about-section">
+  <div class="about-content">
+    <div class="about-text">
+      <h2 class="underline-animate">About Us</h2>
+      <p>
+        Rajamadhi Foods (RMF) has been delighting customers with authentic, flavorful dishes rooted in tradition. With a commitment to quality, health, and local taste, we serve meals that bring comfort and satisfaction to every plate. Our expert chefs prepare each dish using fresh, natural ingredients, ensuring every bite is both nourishing and delicious. Whether it's a hearty breakfast, a wholesome lunch, or a tasty snack, RMF is your go-to destination for pure and honest food. Experience the warmth of home-style cooking, served with care and dedication every day.
+      </p>
+    </div>
+    <div class="about-image">
+      <img src="images/about/about-food.jpg" alt="RMF Dish" />
+    </div>
+  </div>
+</div>
+<div class="service-section" id="service-section">
+  <div class="service-content">
+    <div class="service-text">
+      <h2 class="underline-animate">Services</h2>
+       <p style="font-size: 1.1rem; line-height: 1.7;">
+        At <strong>Rajamadhi Foods (RMF)</strong>, 
+        we proudly offer <strong>bulk food services for weddings, family functions, and special events</strong>. Our dishes are prepared with care, ensuring <strong>great taste</strong> at an <strong>affordable cost</strong>. Whether you're planning a big day or a small gathering, we are here to serve you with <strong>hot, hygienic, and homely meals</strong> that everyone will love.<br><br>
+        <i class="fas fa-check-circle" style="color: green;"></i> Orders are welcome in advance!<br>
+        <i class="fas fa-check-circle" style="color: green;"></i> Vegetarian & Non-Vegetarian options available<br>
+        <i class="fas fa-check-circle" style="color: green;"></i> Packed or served based on your need
+
+      </p>
+    </div>
+    <div class="service-image fade-in" style="flex: 1 1 400px;">
+      <img src="images/services/service-bg.jpg" alt="RMF Dish" style="width: 100%; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);" />
+    </div>
+  </div>
+</div>
+
+<div class="container py-5" id="menus-section">
+ <section class="py-5 text-center">
+  <h2 class="mb-4 underline-animate" id="gallery-section">Our Specialities</h2>
+  <div class="container">
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="card shadow open-modal" data-category="breakfast">
+            <img src="images/breakfast.jpeg" class="card-img-top" alt="Breakfast" />
+            <div class="card-body">
+              <h5 class="card-title">Breakfast</h5>
+              <p class="card-text">Start your day with healthy choices and traditional flavors.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="card shadow open-modal" data-category="lunch">
+            <img src="images/lunch.jpeg" class="card-img-top" alt="Lunch" />
+            <div class="card-body">
+              <h5 class="card-title">Lunch</h5>
+              <p class="card-text">Delicious and wholesome meals made fresh every day.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="card shadow open-modal" data-category="snacks">
+            <img src="images/snacks.jpeg" class="card-img-top" alt="Snacks" />
+            <div class="card-body">
+              <h5 class="card-title">Snacks</h5>
+              <p class="card-text">Crispy, crunchy, and full of flavor to keep you going.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="card shadow open-modal" data-category="dinner">
+            <img src="images/dinner.jpeg" class="card-img-top" alt="Dinner" />
+            <div class="card-body">
+              <h5 class="card-title">Dinner</h5>
+              <p class="card-text">Wind down with comforting meals and warm service.</p>
+            </div>
+          </div>
+        </div>
+
+         <div class="swiper-slide">
+          <div class="card shadow open-modal" data-category="breakfast">
+            <img src="images/breakfast.jpeg" class="card-img-top" alt="Breakfast" />
+            <div class="card-body">
+              <h5 class="card-title">Breakfast</h5>
+              <p class="card-text">Start your day with healthy choices and traditional flavors.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="card shadow open-modal" data-category="lunch">
+            <img src="images/lunch.jpeg" class="card-img-top" alt="Lunch" />
+            <div class="card-body">
+              <h5 class="card-title">Lunch</h5>
+              <p class="card-text">Delicious and wholesome meals made fresh every day.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="card shadow open-modal" data-category="snacks">
+            <img src="images/snacks.jpeg" class="card-img-top" alt="Snacks" />
+            <div class="card-body">
+              <h5 class="card-title">Snacks</h5>
+              <p class="card-text">Crispy, crunchy, and full of flavor to keep you going.</p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+            <div class="card shadow open-modal" data-category="dinner">
+            <img src="images/dinner.jpeg" class="card-img-top" alt="Dinner" />
+            <div class="card-body">
+              <h5 class="card-title">Dinner</h5>
+              <p class="card-text">Wind down with comforting meals and warm service.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrows -->
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </div>
+</section>
+</div>
+</div>
+</div>
+
+
+<footer class="site-footer">
+  <div class="footer-content">
+    
+    <!-- Contact Form (Left Side) -->
+    <div class="footer-form">
+    <h4 class="underline-animate mb-4">Contact Us</h4>
+    <form id="contactForm">
+      <div class="form-group">
+        <input type="text" name="name" placeholder="Your Name" maxlength="20"  required/>
+        <input type="tel" name="phone" placeholder="Phone Number" maxlength="10" required />
+      </div>
+      <div class="form-group">
+        <input type="email" name="email" placeholder="Your Email" required />
+      </div>
+      <div class="form-group">
+        <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    </div>
+
+    <!-- Contact Info (Right Side) -->
+    <div class="footer-contact" id="footer-contact">
+      <h5 class="underline-animate">Reach Us</h5>
+      <p>Email: info@hotelRMF.com</p>
+      <p>Phone: +91 63791 42995</p>
+      <p>Address: 96/202, North Street, Thuraiyur.</p>
+    </div>
+
+  </div>
+
+<div class="footer-bottom">
+  <p>&copy; 2025 <a href="https://www.linkedin.com/in/gokulnath-webdev/" target="_blank" style="color: inherit; text-decoration: underline;">Gokulnath</a>. All Rights Reserved.</p>
+</div>
+</footer>
+
+
+<!-- Modal -->
+<div class="modal fade" id="specialModal" tabindex="-1" aria-labelledby="specialModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img src="images/logo.png" alt="Logo" style="height: 50px;"/>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalContent">
+        <p>Please wait...</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</body>
+</html>
