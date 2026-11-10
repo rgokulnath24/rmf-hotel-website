@@ -1,160 +1,484 @@
-<?php include("display_grid.php");?>
+<?php include "display_grid.php"; ?>
+
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="../images/logo-short.png" />
-<title>Dashboard - RMF</title>
-<link rel="stylesheet" href="css/sidebar.css"/>
-<link rel="stylesheet" href="css/item_grid.css"/>
-<script src="js/sidebar-toggle.js"></script>
-<script src="js/edit_modal.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Manage Menu | RMF Admin</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/sidebar.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/item_grid.css"
+    >
 
 </head>
+
 <body>
-  <?php include("sidebar.php") ?>
-  <div class="main-content" id="mainContent">
-    <div class="logo-container">
-      <div class="logo-zoom-wrapper">
-        <img src="../images/logo.png" alt="logo" class="logo-image" />
-      </div>
+
+<?php include "sidebar.php"; ?>
+
+
+<main class="main-content">
+
+    <div class="page-header">
+
+        <div>
+
+            <span>MENU MANAGEMENT</span>
+
+            <h1>Manage Menu</h1>
+
+            <p>
+                Update, organize and remove menu items.
+            </p>
+
+        </div>
+
+        <a
+            href="create_item.php"
+            class="add-btn"
+        >
+            <i class="fa-solid fa-plus"></i>
+            Add Item
+        </a>
+
     </div>
-    <div class="meals-container" id="mealsContainer"></div>
-  </div>
 
- </body>
-<script>
-    const meals = <?php echo json_encode($data); ?>;
-    const container = document.getElementById("mealsContainer");
-    const grouped = {};
 
-    meals.forEach(meal => {
-      const { category, type } = meal;
-      if (!grouped[category]) grouped[category] = {};
-      if (!grouped[category][type]) grouped[category][type] = [];
-      grouped[category][type].push(meal);
-    });
+    <?php if (empty($data)): ?>
 
-    for (let category in grouped) {
-      const categoryDiv = document.createElement("div");
-      categoryDiv.innerHTML = `<h2>${category}</h2>`;
+        <div class="empty-state">
 
-      for (let type in grouped[category]) {
-        const typeWrapper = document.createElement("div");
-        const typeHeading=document.createElement("h3");
-        typeHeading.className = type.toLowerCase() === "veg" ? "veg-heading" : "nonveg-heading";
-// typeDiv.innerHTML = `<h3 class="${typeClass.trim()}">${type}</h3><br>`;
+            <i class="fa-solid fa-utensils"></i>
 
-        typeHeading.textContent = type;
-        const typeDiv=document.createElement("div");
-        typeDiv.className='grid';
-        grouped[category][type].forEach(item => {
-          const name = item[category.toLowerCase() + "_name"];
-          const img = item[category.toLowerCase() + "_image"];
-          const id = item[category.toLowerCase() + "_id"];
-        function formatTime24To12(timeStr) {
-          const [hour, minute] = timeStr.split(":");
-          let h = parseInt(hour);
-          const ampm = h >= 12 ? "PM" : "AM";
-          h = h % 12 || 12; // Convert 0 to 12
-          const formattedHour = h.toString().padStart(2, '0');
-          const formattedMinute = minute.padStart(2, '0');
-          return `${formattedHour}:${formattedMinute} ${ampm}`;
+            <h2>No menu items yet</h2>
+
+            <p>
+                Start by adding your first dish.
+            </p>
+
+            <a href="create_item.php">
+                Add Menu Item
+            </a>
+
+        </div>
+
+    <?php else: ?>
+
+        <?php
+
+        $grouped = [];
+
+        foreach ($data as $item) {
+
+            $category = $item['category'];
+            $type = strtolower(
+                $item['display_type']
+            );
+
+            $grouped[$category][$type][] = $item;
         }
 
-          const rawFrom = item[category.toLowerCase() + "_available_from"];
-          const rawTo = item[category.toLowerCase() + "_available_to"];
-          const avail_from = formatTime24To12(rawFrom);
-          const avail_to = formatTime24To12(rawTo);
-          typeDiv.innerHTML += `
-            <div class="card">
-              <img src="${img}" alt="${name}">
-             <p><strong>${name}</strong></p>
-             <p><strong><label class="avail-from">Avail From:</label></strong> ${avail_from}</p>
-             <p><strong><label class="avail-to">Avail To:</label></strong> ${avail_to}</p>
-              <div class="actions">
-                <button onclick="editItem('${category}', ${id})">Edit</button>
-                <button onclick="deleteItem('${category}', ${id})">Delete</button>
-              </div>
+        ?>
+
+        <?php foreach ($grouped as $category => $types): ?>
+
+            <section class="category-section">
+
+                <div class="category-header">
+
+                    <div>
+
+                        <span>
+                            MENU CATEGORY
+                        </span>
+
+                        <h2>
+                            <?= ucfirst($category) ?>
+                        </h2>
+
+                    </div>
+
+                    <div class="category-count">
+
+                        <?php
+
+                        $count = 0;
+
+                        foreach ($types as $items) {
+                            $count += count($items);
+                        }
+
+                        ?>
+
+                        <?= $count ?> items
+
+                    </div>
+
+                </div>
+
+
+                <?php foreach ($types as $type => $items): ?>
+
+                    <div class="type-section">
+
+                        <h3
+                            class="<?= $type === 'veg'
+                                ? 'veg'
+                                : 'nonveg' ?>"
+                        >
+                            <span></span>
+                            <?= ucfirst($type) ?>
+                        </h3>
+
+
+                        <div class="item-grid">
+
+                            <?php foreach ($items as $item): ?>
+
+                                <?php
+
+                                $prefix =
+                                    $item['category'] . "_";
+
+                                $id =
+                                    (int)$item[
+                                        $prefix . "id"
+                                    ];
+
+                                $name =
+                                    htmlspecialchars(
+                                        $item[
+                                            $prefix . "name"
+                                        ],
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    );
+
+                                $image =
+                                    htmlspecialchars(
+                                        $item[
+                                            $prefix . "image"
+                                        ],
+                                        ENT_QUOTES,
+                                        'UTF-8'
+                                    );
+
+                                $from = date(
+                                    "h:i A",
+                                    strtotime(
+                                        $item[
+                                            $prefix .
+                                            "available_from"
+                                        ]
+                                    )
+                                );
+
+                                $to = date(
+                                    "h:i A",
+                                    strtotime(
+                                        $item[
+                                            $prefix .
+                                            "available_to"
+                                        ]
+                                    )
+                                );
+
+                                ?>
+
+                                <article
+                                    class="item-card"
+                                    data-category="<?= $item['category'] ?>"
+                                    data-id="<?= $id ?>"
+                                >
+
+                                    <div class="item-image">
+
+                                        <img
+                                            src="<?= $image ?>"
+                                            alt="<?= $name ?>"
+                                            loading="lazy"
+                                        >
+
+                                        <span class="status-badge">
+                                            Active
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="item-card-body">
+
+                                        <div class="item-card-heading">
+
+                                            <h4>
+                                                <?= $name ?>
+                                            </h4>
+
+                                            <span
+                                                class="food-type <?= $type ?>"
+                                            >
+                                                <?= ucfirst($type) ?>
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="item-time">
+
+                                            <i class="fa-regular fa-clock"></i>
+
+                                            <?= $from ?>
+                                            –
+                                            <?= $to ?>
+
+                                        </div>
+
+
+                                        <div class="item-actions">
+
+                                            <button
+                                                type="button"
+                                                class="edit-btn"
+                                                onclick="editItem(
+                                                    '<?= $item['category'] ?>',
+                                                    <?= $id ?>
+                                                )"
+                                            >
+                                                <i class="fa-solid fa-pen"></i>
+                                                Edit
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                class="delete-btn"
+                                                onclick="deleteItem(
+                                                    '<?= $item['category'] ?>',
+                                                    <?= $id ?>
+                                                )"
+                                            >
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            <?php endforeach; ?>
+
+                        </div>
+
+                    </div>
+
+                <?php endforeach; ?>
+
+            </section>
+
+        <?php endforeach; ?>
+
+    <?php endif; ?>
+
+</main>
+
+
+<!-- ================= EDIT MODAL ================= -->
+
+<div
+    class="edit-modal"
+    id="editModal"
+>
+
+    <div class="edit-modal-card">
+
+        <button
+            class="modal-close"
+            onclick="closeModal()"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="modal-heading">
+
+            <span>MENU MANAGEMENT</span>
+
+            <h2>Edit Menu Item</h2>
+
+        </div>
+
+
+        <form
+            id="editForm"
+            enctype="multipart/form-data"
+        >
+
+            <input
+                type="hidden"
+                name="category"
+                id="editCategory"
+            >
+
+            <input
+                type="hidden"
+                name="id"
+                id="editId"
+            >
+
+
+            <div class="edit-form-grid">
+
+                <div class="edit-field full">
+
+                    <label>Dish Name</label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        id="editName"
+                        maxlength="40"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="edit-field">
+
+                    <label>Food Type</label>
+
+                    <select
+                        name="type"
+                        id="editType"
+                        required
+                    >
+
+                        <option value="veg">
+                            Veg
+                        </option>
+
+                        <option value="non-veg">
+                            Non-Veg
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="edit-field">
+
+                    <label>Available From</label>
+
+                    <input
+                        type="time"
+                        name="from"
+                        id="editFrom"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="edit-field">
+
+                    <label>Available To</label>
+
+                    <input
+                        type="time"
+                        name="to"
+                        id="editTo"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="edit-field full">
+
+                    <label>Replace Image</label>
+
+                    <input
+                        type="file"
+                        name="image"
+                        id="editImage"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+
+                </div>
+
             </div>
-          `;
-        });
-        typeWrapper.appendChild(typeHeading);
-        typeWrapper.appendChild(typeDiv);
-        categoryDiv.appendChild(typeWrapper);
-      }
 
-      container.appendChild(categoryDiv);
-    }
 
-  
-    function deleteItem(category, id) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "Delete this item?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch("delete_item.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `category=${category}&id=${id}`
-          })
-          .then(res => res.text())
-          .then(data => {
-            Swal.fire("Deleted!", data, "success").then(() => location.reload());
-          });
-        }
-      });
-    }
+            <div class="existing-image">
 
-</script>
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <span onclick="closeModal()" class="close-btn1">&times;</span>
-    <h2><center>Edit Meal</center></h2>
-    <form id="editForm" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="category" id="editCategory">
-      <input type="hidden" name="id" id="editId">
+                <span>Current image</span>
 
-      <label for="editName">Name:</label>
-      <input type="text" name="name" id="editName" required maxlength="40">
+                <img
+                    id="existingImage"
+                    src=""
+                    alt="Current dish"
+                >
 
-      <label for="editType">Type:</label>
-      <select name="type" id="editType" required>
-        <option value="Veg">Veg</option>
-        <option value="Non-Veg">Non-Veg</option>
-      </select>
+            </div>
 
-      <label for="editFrom">Available From:</label>
-      <input type="time" name="from" id="editFrom" required>
 
-      <label for="editTo">Available To:</label>
-      <input type="time" name="to" id="editTo" required>
+            <div class="modal-actions">
 
-     <label for="editImage">Image:</label>
-    <input type="file" name="image" id="editImage" onchange="previewImage(event)">
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
 
-    <!-- Old image preview -->
-    <div id="oldImagePreview" style="margin-top: 10px;">
-      <p><strong>Current Image:</strong></p>
-      <br>
-      <img id="existingImage" src="" alt="No image">
-      <br>
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
 
-      <div class="button-group">
-        <button type="submit" class="update-btn">Update</button>
-        <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
-      </div>
-    </form>
-  </div>
 </div>
 
-</div>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/sweetalert2@11"
+></script>
+
+<script src="js/edit_modal.js"></script>
+
+</body>
 </html>

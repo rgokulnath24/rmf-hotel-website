@@ -1,10 +1,22 @@
 <?php
-// DB Connection
-$mysqli = new mysqli("localhost", "root", "pass@123", "hotel");
 
-if ($mysqli->connect_error) {
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "hotel";
+
+
+
+$conn = new mysqli(
+    $host,
+    $username,
+    $password,
+    $database
+);
+
+if ($conn->connect_error) {
     http_response_code(500);
-    echo "Database connection failed: " . $mysqli->connect_error;
-    exit;
+    die("Database connection failed.");
 }
-?>
+
+$conn->set_charset("utf8mb4");

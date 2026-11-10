@@ -1,43 +1,91 @@
 <?php
-include("db.php");
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get category and id from POST
-    $category = $_POST['category'] ?? '';
-    $category = strtolower($category); 
-    //strtolower Convert to lowercase
-    $id = $_POST['id'] ?? '';
-//   if(!array($category,$validtables))
-//   {
-//   echo "Not valid format";
-// exit();
-//   }
-    // Whitelist valid table names to prevent SQL injection
-    $validTables = ['breakfast', 'lunch', 'dinner', 'snacks'];
-    if (!in_array($category, $validTables)) {
-        echo "Invalid category.";
-        exit();
-    }
 
-    // Build column name (e.g., breakfast_id)
-    $idColumn = $category . "_id";
-    $statusColumn = $category . "_status";
+session_start();
 
-    // Connect to DB
+if (!isset($_SESSION['username'])) {
 
+    http_response_code(401);
 
-    // Prepare and bind
-    $stmt = $conn->prepare("update $category SET $statusColumn = 0 WHERE $idColumn = ?");
-    $stmt->bind_param("i", $id);
+    echo "Unauthorized.";
 
-    if ($stmt->execute()) {
-        echo "Item deleted successfully.";
-    } else {
-        echo "Failed to delete item.";
-    }
-
-    $stmt->close();
-    $conn->close();
-} else {
-    echo "Invalid request method.";
+    exit;
 }
-?>
+
+require_once "db.php";
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+    http_response_code(405);
+
+    echo "Invalid request.";
+
+    exit;
+}
+
+$category =
+    strtolower(
+        trim($_POST['category'] ?? '')
+    );
+
+$id =
+    filter_input(
+        INPUT_POST,
+        'id',
+        FILTER_VALIDATE_INT
+    );
+
+$validTables = [
+    'breakfast',
+    'lunch',
+    'snacks',
+    'dinner'
+];
+
+if (
+    !in_array($category, $validTables, true) ||
+    !$id
+) {
+
+    http_response_code(400);
+
+    echo "Invalid request.";
+
+    exit;
+}
+
+$idColumn = $category . "_id";
+$statusColumn = $category . "_status";
+
+$sql = "
+    UPDATE `$category`
+    SET `$statusColumn` = 0
+    WHERE `$idColumn` = ?
+";
+
+$stmt = $conn->prepare($sql);
+
+$stmt->bind_param(
+    "i",
+    $id
+);
+
+if (!$stmt->execute()) {
+
+    http_response_code(500);
+
+    echo "Unable to delete item.";
+
+    exit;
+}
+
+if ($stmt->affected_rows === 0) {
+
+    echo "Item was already removed.";
+
+} else {
+
+    echo "Item removed successfully.";
+}
+
+$stmt->close();
+$conn->close();

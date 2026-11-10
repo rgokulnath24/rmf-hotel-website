@@ -1,36 +1,128 @@
 <?php
-// DB Connection
-include("db.php");
 
-// Get and sanitize form data
-$name = $_POST['name'] ?? '';
-$email = $_POST['email'] ?? '';
-$phone = $_POST['phone'] ?? '';
-$message = $_POST['message'] ?? '';
-$created_private_ip = $_SERVER['REMOTE_ADDR'] ?? '';
-$created_public_ip = file_get_contents("https://api.ipify.org"); // Gets public IP
+header("Content-Type: application/json");
 
-// Prepare and bind
-// mysqli_prepare(insert into table values(?,?,?));
-$stmt = $mysqli->prepare("INSERT INTO customer_queries (name, email, phone, message, created_private_ip, created_public_ip) VALUES (?, ?, ?, ?, ?, ?)");
+require_once "db.php";
 
-if (!$stmt) {
-    http_response_code(500);
-    echo "Prepare failed: " . $mysqli->error;
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+
+    http_response_code(405);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Invalid request method.'
+    ]);
+
     exit;
 }
 
-$stmt->bind_param("ssssss", $name, $email, $phone, $message, $created_private_ip, $created_public_ip);
+$name = trim($_POST['name'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$phone = trim($_POST['phone'] ?? '');
+$message = trim($_POST['message'] ?? '');
 
-// Execute and check
-if ($stmt->execute()) {
-    http_response_code(200);
-    echo "Success";
-} else {
+if ($name === '' || $email === '' || $phone === '' || $message === '') {
+
+    http_response_code(422);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Please fill all required fields.'
+    ]);
+
+    exit;
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+    http_response_code(422);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Please enter a valid email address.'
+    ]);
+
+    exit;
+}
+
+if (!preg_match('/^[0-9]{10}$/', $phone)) {
+
+    http_response_code(422);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Please enter a valid 10-digit phone number.'
+    ]);
+
+    exit;
+}
+
+if (strlen($name) > 50 || strlen($message) > 500) {
+
+    http_response_code(422);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Input exceeds the allowed length.'
+    ]);
+
+    exit;
+}
+
+$privateIp = $_SERVER['REMOTE_ADDR'] ?? '';
+
+$stmt = $conn->prepare("
+    INSERT INTO customer_queries
+    (
+        name,
+        email,
+        phone,
+        message,
+        created_private_ip
+    )
+    VALUES (?, ?, ?, ?, ?)
+");
+
+if (!$stmt) {
+
     http_response_code(500);
-    echo "Insert failed: " . $stmt->error;
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Unable to process your request.'
+    ]);
+
+    exit;
+}
+
+$stmt->bind_param(
+    "sssss",
+    $name,
+    $email,
+    $phone,
+    $message,
+    $privateIp
+);
+
+if (!$stmt->execute()) {
+
+    http_response_code(500);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'Unable to save your message.'
+    ]);
+
+    $stmt->close();
+    $conn->close();
+
+    exit;
 }
 
 $stmt->close();
-$mysqli->close();
-?>
+$conn->close();
+
+echo json_encode([
+    'success' => true,
+    'message' => 'Your message has been sent successfully.'
+]);

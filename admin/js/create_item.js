@@ -1,58 +1,90 @@
-function previewImage(event) {
-  const preview = document.getElementById("preview");
-  preview.src = URL.createObjectURL(event.target.files[0]);
-  preview.style.display = "block";
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("dishForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+    const imageInput =
+        document.getElementById("image");
 
-  const form = document.getElementById("dishForm");
-  const formData = new FormData(form);
+    const preview =
+        document.getElementById("preview");
 
-  fetch("insert_item.php", {
-    method: "POST",
-    body: formData,
-  })
-    .then(response => response.text())
-    .then(data => {
-      // Normalize text (remove HTML tags if present)
-      const cleanText = data.replace(/<[^>]*>/g, "").trim();
+    const form =
+        document.getElementById("dishForm");
 
-      // ✅ If PHP sent an error (contains 'error', 'invalid', 'failed', or <p style="red">)
-      if (
-        data.toLowerCase().includes("error") ||
-        data.toLowerCase().includes("invalid") ||
-        data.toLowerCase().includes("failed") ||
-        data.toLowerCase().includes("❌") ||
-        data.toLowerCase().includes("red")
-      ) {
-        Swal.fire({
-          title: "Error!",
-          text: cleanText,
-          icon: "error",
-          confirmButtonColor: "#e74c3c"
-        });
-      } else {
-        Swal.fire({
-          title: "Success!",
-          text: cleanText,
-          icon: "success",
-          confirmButtonColor: "#2ecc71"
-        });
 
-        // Clear form only on success
-        form.reset();
-        document.getElementById("preview").style.display = "none";
-      }
-    })
-    .catch(error => {
-      console.error("Error:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "Something went wrong. Please try again.",
-        icon: "error",
-        confirmButtonColor: "#e74c3c"
-      });
+    imageInput?.addEventListener("change", event => {
+
+        const file =
+            event.target.files[0];
+
+        if (!file) return;
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+
+            alert(
+                "Please select a JPG, PNG or WEBP image."
+            );
+
+            imageInput.value = "";
+
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+
+            alert(
+                "Image size must be less than 5MB."
+            );
+
+            imageInput.value = "";
+
+            return;
+        }
+
+        const reader =
+            new FileReader();
+
+        reader.onload = event => {
+
+            preview.src =
+                event.target.result;
+
+            preview.style.display =
+                "block";
+
+        };
+
+        reader.readAsDataURL(file);
+
     });
+
+
+    form?.addEventListener("submit", event => {
+
+        const from =
+            document.getElementById(
+                "available_from"
+            ).value;
+
+        const to =
+            document.getElementById(
+                "available_to"
+            ).value;
+
+        if (from >= to) {
+
+            event.preventDefault();
+
+            alert(
+                "Available To must be later than Available From."
+            );
+
+        }
+
+    });
+
 });

@@ -1,29 +1,58 @@
 <?php
-include("db.php");
-session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
-$username = $_SESSION['username'];
 
-$categories = ['breakfast', 'lunch', 'dinner', 'snacks'];
+require_once "db.php";
+
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit;
+}
+
+$categories = [
+    'breakfast',
+    'lunch',
+    'snacks',
+    'dinner'
+];
+
 $data = [];
 
+foreach ($categories as $category) {
 
+    $idColumn = $category . "_id";
+    $statusColumn = $category . "_status";
 
-foreach ($categories as $cat) {
-    $statusColumn = $cat . "_status";
-    $sql = "SELECT * FROM $cat where $statusColumn=1";  //breakfast
+    $sql = "
+        SELECT *
+        FROM `$category`
+        WHERE `$statusColumn` = 1
+        ORDER BY `$idColumn` DESC
+    ";
+
     $result = $conn->query($sql);
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc())
-{
-            $row['category'] = ucfirst($cat);
-            $row['type'] = ucfirst($row[$cat . '_type']);
-            $data[] = $row;
-        }
+
+    if (!$result) {
+        continue;
+    }
+
+    while ($row = $result->fetch_assoc()) {
+
+        $row['category'] = $category;
+
+        $row['display_category'] =
+            ucfirst($category);
+
+        $typeColumn =
+            $category . "_type";
+
+        $row['display_type'] =
+            ucfirst(
+                $row[$typeColumn]
+            );
+
+        $data[] = $row;
     }
 }
+
 $conn->close();
-?>

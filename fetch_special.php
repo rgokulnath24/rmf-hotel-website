@@ -1,48 +1,151 @@
 <?php
-include("db.php");
-$category = $_GET['category'] ?? '';
-$allowed_categories = ['breakfast', 'lunch', 'snacks', 'dinner'];
 
-if (!in_array($category, $allowed_categories)) {
-    echo json_encode(['error' => 'Invalid category']);
+header("Content-Type: application/json");
+
+require_once "db.php";
+
+$category = strtolower(trim($_GET['category'] ?? ''));
+
+$allowedCategories = [
+    'breakfast',
+    'lunch',
+    'snacks',
+    'dinner'
+];
+
+if (!in_array($category, $allowedCategories, true)) {
+
+    http_response_code(400);
+
+    echo json_encode([
+        'error' => 'Invalid menu category.'
+    ]);
+
     exit;
 }
 
+$idColumn = $category . "_id";
+$nameColumn = $category . "_name";
+$typeColumn = $category . "_type";
+$fromColumn = $category . "_available_from";
+$toColumn = $category . "_available_to";
+$imageColumn = $category . "_image";
+$statusColumn = $category . "_status";
 
-$table = $conn->real_escape_string($category);
-$field_prefix = $category;
+$sql = "
+    SELECT
+        `$idColumn`,
+        `$nameColumn`,
+        `$typeColumn`,
+        `$fromColumn`,
+        `$toColumn`,
+        `$imageColumn`
+    FROM `$category`
+    WHERE `$statusColumn` = 1
+    ORDER BY `$idColumn` ASC
+";
 
-$sql = "SELECT * FROM `$table` WHERE `{$field_prefix}_status` = 1 ORDER BY `{$field_prefix}_id` ASC";
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
-    $items_html = '';
+if (!$result) {
 
-    while ($row = $result->fetch_assoc()) {
-        $from=$row["{$field_prefix}_available_from"];
-        $to=$row["{$field_prefix}_available_to"];
-        $fromformatted=date("h:i A",strtotime($from));
-        $toformatted=date("h:i A",strtotime($to));
-        $items_html .= "
-        <div class='col-md-4 mb-3'>
-            <div class='card h-100'>
-                <img src='admin/{$row["{$field_prefix}_image"]}' class='card-img-top' alt='{$row["{$field_prefix}_name"]}' style='height: 200px; object-fit: cover;'>
-                <div class='card-body'>
-                    <h4 class='heading'>{$row["{$field_prefix}_name"]}</h4>
-                    <p><strong class='avail-add'>Avail From: </strong> {$fromformatted}</p>
-                    <p><strong class='avail-add'>Avail To: </strong>{$toformatted}<p>
-                </div>
-            </div>
-        </div>";
-    }
+    http_response_code(500);
 
     echo json_encode([
-        'title' => ucfirst($category),
-        'description' => "<div class='row'>$items_html</div>"
+        'error' => 'Unable to load menu.'
     ]);
-} else {
-    echo json_encode(['error' => 'No data found']);
+
+    exit;
 }
 
+if ($result->num_rows === 0) {
+
+    echo json_encode([
+        'error' => 'No menu items available right now.'
+    ]);
+
+    exit;
+}
+
+$itemsHtml = "";
+
+while ($row = $result->fetch_assoc()) {
+
+    $name = htmlspecialchars(
+        $row[$nameColumn],
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $type = htmlspecialchars(
+        $row[$typeColumn],
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $image = htmlspecialchars(
+        $row[$imageColumn],
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $from = date(
+        "h:i A",
+        strtotime($row[$fromColumn])
+    );
+
+    $to = date(
+        "h:i A",
+        strtotime($row[$toColumn])
+    );
+
+    $itemsHtml .= "
+        <article class='menu-result-card'>
+
+            <img
+                src='admin/$image'
+                alt='$name'
+                loading='lazy'
+            >
+
+            <div class='menu-result-content'>
+
+                <div class='menu-result-top'>
+
+                    <h4>$name</h4>
+
+                    <span class='food-badge $type'>
+                        $type
+                    </span>
+
+                </div>
+
+                <div class='menu-time'>
+
+                    <span>
+                        <i class='fa-regular fa-clock'></i>
+                        Available
+                    </span>
+
+                    <strong>
+                        $from - $to
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </article>
+    ";
+}
+
+echo json_encode([
+    'title' => ucfirst($category),
+    'description' => "
+        <div class='menu-results'>
+            $itemsHtml
+        </div>
+    "
+]);
+
 $conn->close();
-?>

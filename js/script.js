@@ -1,130 +1,267 @@
-// document.querySelectorAll('.scroll-link').forEach(link => {
-//     link.addEventListener('click', function(e) {
-//         e.preventDefault(); // prevent default # in URL
-//         const targetID = this.getAttribute('href').substring(1); // remove #
-//         const targetElement = document.getElementById(targetID);
-//         if(targetElement){
-//             targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-//         }
-//     });
-// });
 document.addEventListener("DOMContentLoaded", () => {
-  /* ========== Underline Animation on Scroll ========== */
-  const underlines = document.querySelectorAll(".underline-animate");
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("active"); // trigger animation
+    /* ================= NAVBAR ================= */
+
+    const navbar = document.querySelector(".navbar");
+
+    window.addEventListener("scroll", () => {
+
+        if (window.scrollY > 50) {
+            navbar.classList.add("scrolled");
+        } else {
+            navbar.classList.remove("scrolled");
         }
-      });
-    },
-    { threshold: 0.5 } // trigger when 50% is visible
-  );
 
-  underlines.forEach(el => observer.observe(el));
-
-  /* ========== Contact Form AJAX Submit ========== */
-  const contactForm = document.getElementById("contactForm");
-  if (contactForm) {
-    contactForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const formData = new FormData(this);
-      
-      fetch("submit_contact_form.php", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => {
-        if (!response.ok) throw new Error("Something went wrong");
-        return response.text();
-      })
-      .then(data => {
-        Swal.fire("Thank You!", "Your response has been recorded.", "success");
-        this.reset();
-      })
-      .catch(() => {
-        Swal.fire("Oops!", "Submission failed. Try again later.", "error");
-      });
     });
-  }
 
-  /* ========== Swiper Slider ========== */
-  if (document.querySelector(".mySwiper")) {
-    const swiper = new Swiper(".mySwiper", {
-      loop: true,
-      slidesPerView: 1,
-      spaceBetween: 20,
-      speed: 800,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      breakpoints: {
-        768: { slidesPerView: 2 },
-        992: { slidesPerView: 3 },
-      },
+
+    /* ================= REVEAL ================= */
+
+    const revealElements =
+        document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("active");
+
+                    observer.unobserve(entry.target);
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.15
+        }
+    );
+
+    revealElements.forEach(element => {
+        observer.observe(element);
     });
-  }
 
-  /* ========== Specials Modal Fetch ========== */
-  document.querySelectorAll('.open-modal').forEach(card => {
-    card.addEventListener('click', () => {
-      const category = card.getAttribute('data-category');
-      
-      fetch('fetch_special.php?category=' + category)
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('modalContent').innerHTML = `
-            <img src="images/${data.image}" class="img-fluid mb-3" alt="${data.title}" />
-            <p>${data.description}</p>
-          `;
-          const modal = new bootstrap.Modal(document.getElementById('specialModal'));
-          modal.show();
+
+    /* ================= MENU SLIDER ================= */
+
+    if (document.querySelector(".menuSwiper")) {
+
+        new Swiper(".menuSwiper", {
+
+            loop: true,
+
+            spaceBetween: 24,
+
+            speed: 700,
+
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true
+            },
+
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev"
+            },
+
+            breakpoints: {
+
+                0: {
+                    slidesPerView: 1
+                },
+
+                768: {
+                    slidesPerView: 2
+                },
+
+                992: {
+                    slidesPerView: 3
+                }
+
+            }
+
         });
+
+    }
+
+
+    /* ================= MENU MODAL ================= */
+
+    const menuCards =
+        document.querySelectorAll(".open-modal");
+
+    menuCards.forEach(card => {
+
+        card.addEventListener("click", async () => {
+
+            const category =
+                card.dataset.category;
+
+            const modal =
+                new bootstrap.Modal(
+                    document.getElementById("specialModal")
+                );
+
+            const modalTitle =
+                document.getElementById("modalTitle");
+
+            const modalContent =
+                document.getElementById("modalContent");
+
+            modalTitle.textContent =
+                category.charAt(0).toUpperCase()
+                + category.slice(1);
+
+            modalContent.innerHTML = `
+                <div class="loading-state">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    Loading menu...
+                </div>
+            `;
+
+            modal.show();
+
+            try {
+
+                const response =
+                    await fetch(
+                        `fetch_special.php?category=${encodeURIComponent(category)}`
+                    );
+
+                const data =
+                    await response.json();
+
+                if (data.error) {
+
+                    modalContent.innerHTML = `
+                        <div class="alert alert-warning">
+                            ${escapeHtml(data.error)}
+                        </div>
+                    `;
+
+                    return;
+                }
+
+                modalContent.innerHTML =
+                    data.description;
+
+            } catch (error) {
+
+                modalContent.innerHTML = `
+                    <div class="alert alert-danger">
+                        Unable to load menu.
+                        Please try again.
+                    </div>
+                `;
+
+            }
+
+        });
+
     });
-  });
 
-  /* ========== Hero Background Slideshow with Fade ========== */
-  const hero = document.querySelector('.hero-section');
-  if (hero) {
-    const images = [
-      "images/content-1.jpeg",
-      "images/content-2.jpeg",
-      "images/content-3.jpeg"
-    ];
-    let index = 0;
 
-    const fadeLayer = document.createElement('div');
-    fadeLayer.style.position = 'absolute';
-    fadeLayer.style.inset = '0';
-    fadeLayer.style.backgroundSize = 'cover';
-    fadeLayer.style.backgroundPosition = 'center';
-    fadeLayer.style.transition = 'opacity 1s ease-in-out';
-    fadeLayer.style.zIndex = '0';
-    fadeLayer.style.opacity = '0';
-    hero.appendChild(fadeLayer);
+    /* ================= CONTACT FORM ================= */
 
-    // First image
-    hero.style.backgroundImage = `url('${images[index]}')`;
+    const contactForm =
+        document.getElementById("contactForm");
 
-    setInterval(() => {
-      fadeLayer.style.backgroundImage = `url('${images[(index + 1) % images.length]}')`;
-      fadeLayer.style.opacity = '1';
+    if (contactForm) {
 
-      setTimeout(() => {
-        hero.style.backgroundImage = fadeLayer.style.backgroundImage;
-        fadeLayer.style.opacity = '0';
-      }, 1000);
+        contactForm.addEventListener(
+            "submit",
+            async event => {
 
-      index = (index + 1) % images.length;
-    }, 4000);
-  }
+                event.preventDefault();
+
+                const button =
+                    contactForm.querySelector(
+                        ".submit-btn"
+                    );
+
+                const status =
+                    document.getElementById(
+                        "formStatus"
+                    );
+
+                button.disabled = true;
+
+                button.innerHTML = `
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    Sending...
+                `;
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "submit_contact_form.php",
+                            {
+                                method: "POST",
+                                body: new FormData(contactForm)
+                            }
+                        );
+
+                    const data =
+                        await response.json();
+
+                    if (!response.ok || !data.success) {
+                        throw new Error(
+                            data.message ||
+                            "Submission failed"
+                        );
+                    }
+
+                    contactForm.reset();
+
+                    status.textContent =
+                        "Message sent successfully.";
+
+                    status.style.color =
+                        "#536f45";
+
+                } catch (error) {
+
+                    status.textContent =
+                        error.message ||
+                        "Something went wrong.";
+
+                    status.style.color =
+                        "#c0392b";
+
+                } finally {
+
+                    button.disabled = false;
+
+                    button.innerHTML = `
+                        Send Message
+                        <i class="fa-solid fa-paper-plane"></i>
+                    `;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ================= HELPERS ================= */
+
+    function escapeHtml(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent = value;
+
+        return div.innerHTML;
+
+    }
+
 });

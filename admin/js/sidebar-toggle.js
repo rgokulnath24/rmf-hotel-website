@@ -1,13 +1,26 @@
-function openSidebar()
-{
-//alert("hello");
-document.getElementById("sidebar").classList.add('active');
-document.getElementById('harmburger').style.display='none';
-document.getElementById('mainContent').classList.add('shifted');
+function openSidebar() {
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const overlay =
+        document.getElementById("sidebarOverlay");
+
+    sidebar?.classList.add("active");
+    overlay?.classList.add("active");
+
 }
-function closeSidebar()
-{
-document.getElementById('sidebar').classList.remove('active');
-document.getElementById('harmburger').style.display='block';
-document.getElementById('mainContent').classList.remove('shifted');
+
+
+function closeSidebar() {
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const overlay =
+        document.getElementById("sidebarOverlay");
+
+    sidebar?.classList.remove("active");
+    overlay?.classList.remove("active");
+
 }

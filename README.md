@@ -7,7 +7,7 @@ A modern, single-page website for RMF Hotel that displays breakfast to dinner it
 ## 🌐 Live Demo
 
 - **User View:** [https://rajamathi-hotel.infinityfree.me/](https://rajamathi-hotel.infinityfree.me/)  
-- **Admin Panel:** [https://rajamathi-hotel.infinityfree.me/admin/login.php](https://rajamathi-hotel.infinityfree.me/admin/login.php)
+- **Admin Panel:** [https://rajamathi-hotel.infinityfree.me/admin/index.php](https://rajamathi-hotel.infinityfree.me/admin/index.php)
   
   - Username: `gokul`  
   - Password: `gokul@123`  

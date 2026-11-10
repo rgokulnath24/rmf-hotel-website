@@ -1,40 +1,99 @@
 <?php
-include("db.php");
+
 session_start();
 
+require_once "db.php";
 
-// Get input
-$username = $_POST['username'] ?? '';
-$password = $_POST['password1'] ?? '';
-$remember = isset($_POST['remember']);
-
-// Prepare and bind statement
-$stmt = $conn->prepare("SELECT password_1 FROM login_credentials WHERE username = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$stmt->store_result();
-
-
-if ($stmt->num_rows === 1) {
-    $stmt->bind_result($db_password);
-    $stmt->fetch();
-
-    if ($password === $db_password) {         
-      $_SESSION['username'] = $username;
-
-        if ($remember) {
-            setcookie("remember_user", $username, time()+(86400*30), "/"); // 30 days
-        }
-
-       // echo "Login successful! Welcome, $username.";
-       header("Location: dashboard.php"); // Uncomment if needed
-    } else {
-        echo "Invalid password.";
-    }
-} else {
-    echo "Username not found.";
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: index.php");
+    exit;
 }
 
+$username =
+    trim($_POST['username'] ?? '');
+
+$password =
+    $_POST['password'] ?? '';
+
+$remember =
+    isset($_POST['remember']);
+
+if ($username === '' || $password === '') {
+
+    header(
+        "Location: index.php?error=1"
+    );
+
+    exit;
+}
+
+$stmt = $conn->prepare("
+    SELECT username, password_1
+    FROM login_credentials
+    WHERE username = ?
+    LIMIT 1
+");
+
+$stmt->bind_param(
+    "s",
+    $username
+);
+
+$stmt->execute();
+
+$result =
+    $stmt->get_result();
+
+$user =
+    $result->fetch_assoc();
+
 $stmt->close();
-$conn->close();
-?>
+
+
+if (
+    !$user ||
+    !password_verify(
+        $password,
+        $user['password_1']
+    )
+) {
+
+    header(
+        "Location: index.php?error=1"
+    );
+
+    exit;
+}
+
+
+/* Prevent session fixation */
+
+session_regenerate_id(true);
+
+$_SESSION['username'] =
+    $user['username'];
+
+
+if ($remember) {
+
+    setcookie(
+        "remember_user",
+        $username,
+        [
+            'expires' =>
+                time() + (86400 * 30),
+
+            'path' => '/',
+
+            'httponly' => true,
+
+            'samesite' => 'Lax'
+        ]
+    );
+
+}
+
+
+header("Location: dashboard.php");
+
+exit;

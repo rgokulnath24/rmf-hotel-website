@@ -1,79 +1,157 @@
-/* Hamburger Icon */
-.hamburger {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  font-size: 1.8rem;
-  color: #333;
-  cursor: pointer;
+:root {
+    --admin-primary: #536f45;
+    --admin-dark: #172017;
+    --admin-bg: #f5f6f2;
+    --admin-white: #ffffff;
+    --admin-text: #222820;
+    --admin-muted: #737b70;
+    --admin-border: #e5e8e1;
 }
 
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -220px; /* Hidden by default */
-  width: 220px;
-  height: 100%;
-  background-color: #2c3e50;
-  color: white;
-  padding: 20px;
-  transition: left 0.3s ease;
-}
-
-.sidebar.active {
-  left: 0;
-}
-
-.sidebar .close-btn {
-  text-align: right;
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-
-.sidebar ul {
-list-style:none;
-}
-
-.sidebar ul li {
-  margin: 20px 0;
-}
-
-.sidebar ul li a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  padding: 5px 10px;
-}
-
-.sidebar ul li a:hover {
-  color:#B0CBA4;
-}
-/* Reset & Base Styling */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #B0CBA4;
-  border-radius: 20px;
-  overflow: hidden;
+body {
+    font-family: "DM Sans", "Segoe UI", sans-serif;
+    background: var(--admin-bg);
+    color: var(--admin-text);
 }
 
-.logo-zoom-wrapper {
-  transform: scale(2.2);
-  transform-origin: center;
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 255px;
+    background: var(--admin-dark);
+    color: white;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 18px;
 }
 
-.logo-image {
-  width: 80px;
-  height: auto;
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 35px;
 }
 
+.sidebar-header img {
+    width: 75px;
+}
+
+.sidebar-close {
+    display: none;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.sidebar-label {
+    font-size: .68rem;
+    color: rgba(255,255,255,.4);
+    letter-spacing: .15em;
+    font-weight: 700;
+    padding: 0 12px 12px;
+}
+
+.sidebar-nav {
+    display: grid;
+    gap: 6px;
+}
+
+.sidebar-nav a,
+.sidebar-footer a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    color: rgba(255,255,255,.65);
+    padding: 13px 14px;
+    border-radius: 12px;
+    transition: .2s ease;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+    color: white;
+    background: rgba(255,255,255,.09);
+}
+
+.sidebar-nav a.active {
+    background: var(--admin-primary);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    display: grid;
+    gap: 5px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 18px;
+}
+
+.sidebar-footer a:hover {
+    color: white;
+}
+
+.mobile-menu-btn {
+    display: none;
+}
+
+.sidebar-overlay {
+    display: none;
+}
+
+.main-content {
+    margin-left: 255px;
+    min-height: 100vh;
+    padding: 35px;
+}
+
+@media (max-width: 767px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform .3s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .sidebar-close {
+        display: block;
+    }
+
+    .mobile-menu-btn {
+        display: grid;
+        place-items: center;
+        position: fixed;
+        top: 18px;
+        left: 18px;
+        z-index: 1500;
+        width: 44px;
+        height: 44px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--admin-dark);
+        color: white;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.4);
+        z-index: 1900;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 80px 18px 30px;
+    }
+
+}
